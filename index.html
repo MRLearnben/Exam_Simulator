@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%8E%93%3C/text%3E%3C/svg%3E">
+<meta name="description" content="UGC NET Paper-1 and Paper-2 (Computer Science, Psychology) study lab with mock tests and a timed exam simulator.">
+<title>NET Lab: Paper-1, Paper-2 and Exam Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#f4f3f1;--panel:#ffffff;--raised:#eeeeee;--ink:#0a0a0a;--mute:#6b6b6b;--acc:#141414;--acc-ink:#ffffff;--hue:#1d5fbf;--bad:#c4242a;--line:#e6e6e6;--ok-bg:#dcfae5;--ok-ink:#04250e;--no-bg:#ffedea;--no-ink:#831c1e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f0f0f;--panel:#171717;--raised:#242424;--ink:#f2f2f2;--mute:#9a9a9a;--acc:#f2f2f2;--acc-ink:#0a0a0a;--hue:#6ea0f0;--bad:#f07a7e;--line:#2b2b2b;--ok-bg:#12351d;--ok-ink:#b8f0c6;--no-bg:#3a1517;--no-ink:#ffb3b0}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f0f0f;--panel:#171717;--raised:#242424;--ink:#f2f2f2;--mute:#9a9a9a;--acc:#f2f2f2;--acc-ink:#0a0a0a;--hue:#6ea0f0;--bad:#f07a7e;--line:#2b2b2b;--ok-bg:#12351d;--ok-ink:#b8f0c6;--no-bg:#3a1517;--no-ink:#ffb3b0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Geist",system-ui,sans-serif}
+#p1-app a{color:var(--ink);text-decoration-color:var(--acc);text-underline-offset:3px}
+#p1-app button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+#p1-app :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+#p1-app header{display:flex;align-items:center;gap:20px;padding:14px 24px;flex-wrap:wrap}
+#p1-app .mark{width:34px;height:34px;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;font:600 15px "Geist",system-ui,sans-serif;border-radius:50%}
+#p1-app .brand{font:600 20px "Geist",system-ui,sans-serif;letter-spacing:-.01em}
+#p1-app .brand small{display:block;font:400 12px "Geist";color:var(--mute);letter-spacing:0}
+#p1-app .top{margin-left:auto;display:flex;gap:18px;font-size:14px;flex-wrap:wrap}
+#p1-app .layout{display:grid;grid-template-columns:260px 1fr;gap:0;min-height:calc(100vh - 70px)}
+#p1-app nav{padding:8px 12px 24px 24px}
+#p1-app nav button{display:flex;justify-content:space-between;width:100%;text-align:left;padding:9px 10px;font-size:14.5px;color:var(--mute);border-radius:6px}
+#p1-app nav button[aria-current="true"]{background:var(--panel);color:var(--ink);font-weight:600}
+#p1-app nav button span:last-child{font-variant-numeric:tabular-nums}
+#p1-app nav .mock{margin-top:14px;background:var(--acc);color:var(--acc-ink);font-weight:600;justify-content:center}
+#p1-app main{padding:8px 24px 64px 16px;max-width:980px}
+#p1-app h1{font:600 34px/1.1 "Geist",system-ui,sans-serif;letter-spacing:-.02em;margin:8px 0 6px}
+#p1-app .sub{color:var(--mute);margin:0 0 20px}
+#p1-app .tabs{display:flex;gap:4px;margin-bottom:20px}
+#p1-app .tabs button{padding:8px 14px;border-radius:6px;font-weight:500;color:var(--mute)}
+#p1-app .tabs button[aria-selected="true"]{background:var(--panel);color:var(--ink)}
+#p1-app .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+#p1-app .box{background:var(--panel);padding:16px;border-radius:6px}
+#p1-app .box h2{font-size:13px;margin:0 0 10px;color:var(--mute);font-weight:600}
+#p1-app .topic{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:8px 0;border-bottom:1px solid var(--line)}
+#p1-app .topic i{width:18px;height:18px;border:2px solid var(--mute);border-radius:4px;flex:none;display:grid;place-items:center;font-style:normal;font-size:12px;color:var(--acc-ink)}
+#p1-app .topic[aria-pressed="true"] i{background:var(--acc);border-color:var(--acc)}
+#p1-app .topic[aria-pressed="true"] span{color:var(--mute);text-decoration:line-through}
+#p1-app .topic[aria-current="true"] span{font-weight:600}
+#p1-app .topic span{flex:1}
+#p1-app .mt{font-style:normal;font-size:11px;letter-spacing:1px;color:var(--acc);white-space:nowrap}
+#p1-app .lvl{color:var(--acc)}
+#p1-app svg.map{width:100%;height:auto;display:block}
+#p1-app svg.map text{font:500 11.5px "Geist",sans-serif;fill:var(--ink);cursor:pointer}
+#p1-app svg.map .n rect{fill:var(--bg);stroke:var(--line)}
+#p1-app svg.map .n.d rect{fill:var(--acc);stroke:var(--acc)}
+#p1-app svg.map .n.d text{fill:var(--acc-ink)}
+#p1-app svg.map line{stroke:var(--line);stroke-width:1.5}
+#p1-app svg.map .c circle{fill:var(--ink)}
+#p1-app svg.map .c text{fill:var(--bg);font-weight:600;cursor:default}
+#p1-app .bar{height:6px;background:var(--line);border-radius:3px;margin:6px 0 16px}
+#p1-app .bar div{height:100%;background:var(--acc);border-radius:3px;transition:width .3s}
+#p1-app .links{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:20px;font-size:14.5px}
+#p1-app .q{background:var(--panel);padding:16px;border-radius:6px;margin-bottom:14px}
+#p1-app .q p{margin:0 0 10px;font-weight:600}
+#p1-app .opt{display:block;width:100%;text-align:left;padding:9px 12px;margin:4px 0;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+#p1-app .opt:hover:not(:disabled){border-color:var(--acc)}
+#p1-app .opt.ok{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+#p1-app .opt.no{border-color:var(--bad);color:var(--bad)}
+#p1-app .ex{margin:10px 0 0;color:var(--mute);font-size:14.5px}
+#p1-app .pill{display:inline-block;font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+#p1-app .big{font:600 56px/1 "Geist",system-ui,sans-serif;letter-spacing:-.03em}
+#p1-app .cta{background:var(--acc);color:var(--acc-ink);padding:10px 18px;border-radius:6px;font-weight:600;margin-top:10px}
+#p1-app table{width:100%;border-collapse:collapse;font-size:14.5px}
+#p1-app td,#p1-app th{padding:7px 0;border-bottom:1px solid var(--line);text-align:left}
+#p1-app td:last-child,#p1-app th:last-child{text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:820px){#p1-app .layout{display:block}
+#p1-app nav{display:flex;overflow-x:auto;padding:0 16px 8px;gap:4px}
+#p1-app nav button{width:auto;white-space:nowrap;gap:8px;flex:none}
+#p1-app main{padding:8px 16px 48px}
+#p1-app .grid{grid-template-columns:1fr}
+#p1-app h1{font-size:28px}}
+#p2-app a{color:var(--ink);text-decoration-color:var(--acc);text-underline-offset:3px}
+#p2-app button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+#p2-app :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+#p2-app header{display:flex;align-items:center;gap:16px;padding:14px 24px;flex-wrap:wrap}
+#p2-app .mk{width:34px;height:34px;border-radius:50%;background:var(--acc);color:var(--on);display:grid;place-items:center;font:600 14px "Geist",system-ui,sans-serif}
+#p2-app .t{font:600 20px "Geist",system-ui,sans-serif}
+#p2-app .t small{display:block;font:400 12px "Geist";color:var(--mute)}
+#p2-app .sw{margin-left:auto;display:flex;gap:4px;background:var(--panel);padding:3px;border-radius:8px}
+#p2-app .sw button{padding:7px 14px;border-radius:6px;font-weight:500;color:var(--mute)}
+#p2-app .sw button[aria-pressed="true"]{background:var(--acc);color:var(--on);font-weight:600}
+#p2-app .layout{display:grid;grid-template-columns:270px 1fr}
+#p2-app nav{padding:8px 12px 24px 24px}
+#p2-app nav button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;padding:9px 10px;font-size:14.5px;color:var(--mute);border-radius:6px}
+#p2-app nav button[aria-current="true"]{background:var(--panel);color:var(--ink);font-weight:600}
+#p2-app nav .mock{margin-top:14px;background:var(--acc);color:var(--on);font-weight:600;justify-content:center}
+#p2-app main{padding:8px 24px 64px 16px;max-width:980px}
+#p2-app h1{font:600 32px/1.1 "Geist",system-ui,sans-serif;letter-spacing:-.02em;margin:8px 0 6px}
+#p2-app .sub{color:var(--mute);margin:0 0 12px}
+#p2-app .bar{height:6px;background:var(--line);border-radius:3px;margin-bottom:20px}
+#p2-app .bar div{height:100%;background:var(--acc);border-radius:3px}
+#p2-app .grid{display:grid;grid-template-columns:1fr 1.3fr;gap:20px}
+#p2-app .box{background:var(--panel);padding:16px;border-radius:6px}
+#p2-app .box h2{font-size:12px;letter-spacing:.04em;margin:0 0 10px;color:var(--mute)}
+#p2-app .tp{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:8px 0;border-bottom:1px solid var(--line)}
+#p2-app .tp i{width:18px;height:18px;border:2px solid var(--mute);border-radius:4px;flex:none;display:grid;place-items:center;font-style:normal;font-size:12px;color:var(--on)}
+#p2-app .tp[aria-pressed="true"] i{background:var(--acc);border-color:var(--acc)}
+#p2-app .tp[aria-pressed="true"] span{color:var(--mute);text-decoration:line-through}
+#p2-app .q{padding:0 0 14px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+#p2-app .q:last-child{border:0;margin:0}
+#p2-app .q p{margin:0 0 8px;font-weight:600}
+#p2-app .o{display:block;width:100%;text-align:left;padding:8px 12px;margin:4px 0;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+#p2-app .o:hover:not(:disabled){border-color:var(--acc)}
+#p2-app .o.ok{background:var(--acc);color:var(--on);border-color:var(--acc)}
+#p2-app .o.no{border-color:var(--bad);color:var(--bad)}
+#p2-app .o.sel{border-color:var(--acc);outline:1px solid var(--ink);outline-offset:-2px}
+#p2-app .ex{color:var(--mute);font-size:14.5px;margin:8px 0 0}
+#p2-app .links{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:18px;font-size:14.5px}
+#p2-app .cta{background:var(--acc);color:var(--on);padding:10px 18px;border-radius:6px;font-weight:600;margin-top:10px}
+#p2-app .btn{background:var(--panel);padding:9px 16px;border-radius:6px;font-weight:500;margin-top:10px}
+#p2-app .big{font:600 56px/1 "Geist",system-ui,sans-serif;letter-spacing:-.03em}
+#p2-app .clk{font:600 20px "Geist";font-variant-numeric:tabular-nums}
+#p2-app table{width:100%;border-collapse:collapse;font-size:14.5px}
+#p2-app td{padding:7px 0;border-bottom:1px solid var(--line)}
+#p2-app td+td{text-align:right;font-variant-numeric:tabular-nums}
+#p2-app .g{color:var(--acc);font-weight:600}
+#p2-app .r{color:var(--bad);font-weight:600}
+@media (max-width:820px){#p2-app .layout{display:block}
+#p2-app nav{display:flex;overflow-x:auto;padding:0 16px 8px;gap:4px}
+#p2-app nav button{width:auto;white-space:nowrap;flex:none}
+#p2-app main{padding:8px 16px 48px}
+#p2-app .grid{grid-template-columns:1fr}
+#p2-app h1{font-size:26px}
+#p2-app .sw{margin-left:0}}
+#p3-app button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+#p3-app :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+#p3-app .bar{display:flex;align-items:center;gap:16px;padding:12px 24px;border-bottom:1px solid var(--line)}
+#p3-app .mk{width:32px;height:32px;border-radius:50%;background:var(--acc);color:var(--on);display:grid;place-items:center;font:600 14px "Geist",system-ui,sans-serif}
+#p3-app .t{font:600 18px "Geist",system-ui,sans-serif}
+#p3-app .t small{display:block;font:400 12px "Geist";color:var(--mute)}
+#p3-app .clk{margin-left:auto;font:600 22px "Geist";font-variant-numeric:tabular-nums}
+#p3-app .clk.lo{color:var(--bad)}
+#p3-app .btn{padding:9px 16px;border-radius:6px;background:var(--panel);font-weight:500}
+#p3-app .btn.p{background:var(--acc);color:var(--on);font-weight:600}
+#p3-app .home{max-width:720px;margin:0 auto;padding:48px 24px}
+#p3-app .home h1{font:600 38px/1.1 "Geist",system-ui,sans-serif;letter-spacing:-.02em;margin:0 0 12px}
+#p3-app .home li{margin:6px 0}
+#p3-app .row2{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+#p3-app .wrap{display:grid;grid-template-columns:1fr 300px;gap:24px;padding:20px 24px;max-width:1180px;margin:0 auto}
+#p3-app .u{font-size:13px;color:var(--mute);margin-bottom:6px}
+#p3-app .qt{font-size:18px;font-weight:500;margin:0 0 14px}
+#p3-app .ctx{background:var(--panel);padding:14px 16px;border-radius:6px;margin-bottom:16px;font-size:15px}
+#p3-app .ctx p{margin:6px 0 0}
+#p3-app .o{display:flex;gap:12px;width:100%;text-align:left;padding:11px 14px;margin:6px 0;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+#p3-app .o b{width:22px;flex:none;color:var(--mute)}
+#p3-app .o:hover:not(:disabled){border-color:var(--acc)}
+#p3-app .o.sel{border-color:var(--acc);outline:1px solid var(--ink);outline-offset:-2px}
+#p3-app .o.ok{background:var(--acc);color:var(--on);border-color:var(--acc)}
+#p3-app .o.ok b{color:var(--on)}
+#p3-app .o.no{border-color:var(--bad);color:var(--bad)}
+#p3-app .act{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+#p3-app .ex{color:var(--mute);font-size:14.5px;margin:10px 0 0}
+#p3-app .side{background:var(--panel);padding:14px;border-radius:6px;align-self:start}
+#p3-app .side h2{font-size:12px;margin:0 0 8px;color:var(--mute);letter-spacing:.04em}
+#p3-app .pr{display:flex;gap:6px;align-items:center;margin:5px 0}
+#p3-app .pr>span{width:26px;font-size:11px;color:var(--mute)}
+#p3-app .pb{width:34px;height:34px;border:1.5px solid var(--line);border-radius:5px;font-size:13px;font-variant-numeric:tabular-nums;background:var(--bg)}
+#p3-app .pb.n{border-color:var(--bad);color:var(--bad)}
+#p3-app .pb.a{background:var(--acc);border-color:var(--acc);color:var(--on)}
+#p3-app .pb.m{border-radius:50%;border-color:var(--acc);border-style:dashed;border-width:2px}
+#p3-app .pb.am{border-radius:50%;background:var(--acc);color:var(--on);border-color:var(--acc)}
+#p3-app .pb.c{outline:2px solid var(--ink);outline-offset:1px}
+#p3-app .lg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--mute);margin-top:10px}
+#p3-app .dlg{background:var(--panel);padding:20px;border-radius:6px;max-width:480px;margin:40px auto}
+#p3-app .big{font:600 60px/1 "Geist",system-ui,sans-serif;letter-spacing:-.03em}
+#p3-app .res{max-width:820px;margin:0 auto;padding:32px 24px}
+#p3-app table{width:100%;border-collapse:collapse;font-size:14.5px}
+#p3-app td,#p3-app th{padding:7px 0;border-bottom:1px solid var(--line);text-align:left}
+#p3-app td+td,#p3-app th+th{text-align:right;font-variant-numeric:tabular-nums}
+#p3-app .rq{background:var(--panel);padding:14px 16px;border-radius:6px;margin:10px 0}
+#p3-app .rq p{margin:2px 0}
+#p3-app .g{color:var(--acc);font-weight:600}
+#p3-app .r{color:var(--bad);font-weight:600}
+@media (max-width:860px){#p3-app .wrap{grid-template-columns:1fr;padding:16px}
+#p3-app .bar{padding:10px 16px}
+#p3-app .home h1{font-size:30px}}
+:root{--on:var(--acc-ink)}
+.shell{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}.sb{display:flex;gap:16px;align-items:center;padding:10px 24px;flex-wrap:wrap}.sb b{font:600 15px "Geist",system-ui,sans-serif}.st{display:flex;gap:4px;background:var(--panel);padding:3px;border-radius:8px;flex-wrap:wrap}.st button{padding:7px 14px;border-radius:6px;font:500 14px "Geist",sans-serif;color:var(--mute);border:0;background:none;cursor:pointer}.st button[aria-selected="true"]{background:var(--acc);color:var(--acc-ink);font-weight:600}[hidden]{display:none!important}
+/* ledger restyle: flat white panels on a stone ground, ink chrome, one blue hue on the data */
+body{background:var(--bg);font:400 14px/1.5 "Geist",Inter,system-ui,sans-serif}
+:is(#p1-app,#p2-app,#p3-app) h1{font:500 24px/1.25 "Geist",system-ui,sans-serif;letter-spacing:-.01em;margin:20px 0 4px}
+:is(#p1-app,#p2-app,#p3-app) .home h1{font:500 24px/1.25 "Geist",system-ui,sans-serif}
+#p1-app>header{display:none}
+#p2-app>header .mk,#p3-app .bar .mk,#p3-app .home .mk{display:none}
+#p2-app>header{max-width:1208px;margin:0 auto;padding:16px 24px 0}#p2-app>header .t{font:500 16px "Geist",system-ui,sans-serif}
+:is(#p1-app,#p2-app,#p3-app) .layout{max-width:1208px;margin:0 auto}
+:is(#p1-app,#p2-app,#p3-app) :is(.box,.side,.rq,.ctx,.dlg),#p1-app .q{background:var(--panel);border:1px solid var(--line);border-radius:8px}
+:is(#p1-app,#p2-app,#p3-app) .grid,:is(#p1-app,#p2-app,#p3-app) .wrap{gap:12px}
+:is(#p1-app,#p2-app,#p3-app) .btn{background:var(--raised);color:var(--ink);font-weight:500;border-radius:6px}
+:is(#p1-app,#p2-app,#p3-app) .cta{background:var(--acc);color:var(--acc-ink);font-weight:500;border-radius:6px}
+:is(#p1-app,#p2-app,#p3-app) nav button[aria-current="true"]{background:var(--raised);color:var(--ink);font-weight:500}
+:is(#p1-app,#p2-app,#p3-app) nav .mock{background:var(--acc);color:var(--acc-ink);font-weight:500}
+:is(#p1-app,#p2-app,#p3-app) .sw{background:none;padding:0}:is(#p1-app,#p2-app,#p3-app) .sw button{border-radius:6px}:is(#p1-app,#p2-app,#p3-app) .sw button[aria-pressed="true"]{background:var(--raised);color:var(--ink);font-weight:500}
+:is(#p1-app,#p2-app,#p3-app) .bar div{background:var(--hue)}
+#p1-app svg.map .n.d rect{fill:var(--hue);stroke:var(--hue)}#p1-app svg.map .n.d text{fill:#fff}
+:is(#p1-app,#p2-app,#p3-app) :is(.opt,.o){background:var(--panel);border-radius:6px}
+:is(#p1-app,#p2-app,#p3-app) :is(.opt,.o).ok{background:var(--ok-bg);color:var(--ok-ink);border-color:var(--ok-ink)}
+:is(#p1-app,#p2-app,#p3-app) .o.ok b{color:var(--ok-ink)}
+:is(#p1-app,#p2-app,#p3-app) :is(.opt,.o).no{background:var(--no-bg);color:var(--no-ink);border-color:var(--no-ink)}
+:is(#p1-app,#p2-app,#p3-app) .o.sel{border-color:var(--ink);outline:1px solid var(--ink);outline-offset:-2px}
+:is(#p1-app,#p2-app,#p3-app) .g{color:var(--ok-ink)}:is(#p1-app,#p2-app,#p3-app) .r{color:var(--no-ink)}
+#p1-app .mt{color:var(--mute)}#p1-app .lvl{color:var(--ink)}
+:is(#p1-app,#p2-app,#p3-app) .big{font:400 40px/1 "Geist",system-ui,sans-serif;letter-spacing:-.02em}
+:is(#p1-app,#p2-app,#p3-app) .clk{font:500 18px "Geist",system-ui,sans-serif}
+:is(#p1-app,#p2-app,#p3-app) :is(table,.clk,.pb,.pill){font-variant-numeric:tabular-nums}
+:is(#p1-app,#p2-app,#p3-app) a{text-decoration-color:var(--line)}
+.shell{background:var(--bg);border-bottom:1px solid var(--line)}
+.sb{max-width:1208px;margin:0 auto;padding:0 24px;min-height:48px;gap:20px;color:var(--ink)}
+.sb b{font:500 15px "Geist",system-ui,sans-serif;margin-left:-12px}
+.st{background:none;padding:0;gap:2px}
+.st button{padding:6px 10px;font:500 14px "Geist",system-ui,sans-serif}
+.st button[aria-selected="true"]{background:var(--raised);color:var(--ink);font-weight:500}
+.sl{margin-left:auto;display:flex;gap:16px;font-size:13px}.sl a{color:var(--mute);text-decoration:none}.sl a:hover{color:var(--ink)}
+@media (max-width:700px){.sb{padding:6px 16px;gap:10px}.sl{display:none}.sb b{margin-left:-6px}}
+
+.hd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.hd h2{margin:0!important}
+.chip{padding:5px 10px;border-radius:6px;background:var(--raised);font-size:12px;font-weight:500;color:var(--mute);border:0;cursor:pointer;font-family:inherit}
+.chip[aria-pressed="true"]{background:var(--acc);color:var(--acc-ink)}
+.pr{font-style:normal;font-size:12px;color:var(--mute);white-space:nowrap}
+.pr.hi{background:var(--raised);color:var(--ink);font-weight:500;padding:1px 8px;border-radius:999px}
+#p2-app .tp span{flex:1}
+#p1-app svg.map .n.hp rect{stroke:var(--ink);stroke-width:2}#p1-app svg.map .n.dim{opacity:.35}
+.lg{font-size:12px;color:var(--mute);margin:8px 0 0}
+.fs{display:flex;gap:2px;margin-left:auto}.sl{margin-left:0}
+.fs button{padding:4px 9px;border-radius:6px;font:500 13px "Geist",system-ui,sans-serif;background:var(--raised);color:var(--ink);border:0;cursor:pointer}.fs button:disabled{opacity:.4;cursor:default}
+</style>
+</head>
+<body>
+<div class="shell"><div class="sb"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 2a9 9 0 0 1 9 9h-9z" fill="var(--hue)"/></svg><b>NET Lab</b><div class="st" role="tablist"><button role="tab" data-p="p1">Paper-1 Lab</button><button role="tab" data-p="p2">Paper-2 Lab</button><button role="tab" data-p="p3">Exam simulator</button></div><div class="fs" role="group" aria-label="Text size"><button data-fs="-1" aria-label="Smaller text">A−</button><button data-fs="0" aria-label="Reset text size">A</button><button data-fs="1" aria-label="Larger text">A+</button></div><div class="sl"><a href="https://ugcnet.nta.ac.in/" target="_blank" rel="noopener">NTA</a><a href="https://swayam.gov.in/" target="_blank" rel="noopener">SWAYAM</a><a href="https://www.ugc.gov.in/" target="_blank" rel="noopener">UGC</a></div></div></div>
+<div id="p1-app">
+<header>
+  <div class="mark">N1</div>
+  <div class="brand">NET Paper-1 Lab<small>General Paper on Teaching &amp; Research Aptitude</small></div>
+  <div class="top">
+    <a href="https://ugcnet.nta.ac.in/" target="_blank" rel="noopener">Official NTA site</a>
+    <a href="https://swayam.gov.in/" target="_blank" rel="noopener">SWAYAM</a>
+    <a href="https://www.ugc.gov.in/" target="_blank" rel="noopener">UGC</a>
+  </div>
+</header>
+<div class="layout">
+  <nav id="p1-nav" aria-label="Units"></nav>
+  <main id="p1-main"></main>
+</div>
+</div>
+<div id="p2-app" hidden>
+<header><div class="mk">N2</div><div class="t">NET Paper-2 Lab<small>Subject paper · 100 questions · 200 marks · no negative marking</small></div><div class="sw" id="p2-sw"></div></header>
+<div class="layout"><nav id="p2-nav" aria-label="Units"></nav><main id="p2-main"></main></div>
+</div>
+<div id="p3-app" hidden><div id="p3-root"></div></div>
+<script>
+const BANK=[
+"0|The reflective level of teaching was advocated by|Herbart|Morrison|Hunt|Bloom|C|Herbart: memory level. Morrison: understanding. Hunt: reflective, the highest.",
+"0|Which of the following is a learner-centred method?|Lecture|Dictation|Chalk-and-talk|Project method|D|Learners plan and do the work. The others are teacher-centred.",
+"0|Adult learners differ from adolescents mainly in being|Dependent on the teacher|Less motivated|Self-directed and experience-rich|Only extrinsically motivated|C|Adults are self-directed (andragogy) and draw on experience.",
+"0|Evaluation carried out during a course to improve learning is|Summative|Terminal|Placement|Formative|D|Formative evaluation is continuous and feeds back into teaching.",
+"0|SWAYAM is|A national MOOC platform|An accreditation body|A research ranking|A scholarship scheme|A|SWAYAM is India’s national platform for MOOCs.",
+"1|Which method tests cause and effect by manipulating variables?|Historical|Experimental|Descriptive|Ethnographic|B|Experimental research manipulates an independent variable.",
+"1|Positivism was founded by|Karl Popper|Max Weber|Thomas Kuhn|Auguste Comte|D|Comte held that knowledge comes from observable facts.",
+"1|The correct order of research steps is|Problem → literature review → hypothesis → data collection → analysis → report|Data → problem → report → hypothesis|Hypothesis → report → problem → data|Report → analysis → problem → data|A|Research proceeds from problem to report in this order.",
+"1|Shodhganga is|A plagiarism tool|A citation style|A repository of Indian theses|A funding agency|C|Shodhganga, run by INFLIBNET, hosts Indian theses.",
+"1|Taking participants’ permission before a study is a matter of|Sampling|Research ethics|Hypothesis|Research design|B|Informed consent is a core principle of research ethics.",
+"2|The main idea of the passage is that|Recorded lectures are useless|Teachers are no longer needed|Access to digital tools must be matched with active, guided learning|Assessment should be abolished|C|The passage pairs access with questioning and guided reflection.",
+"2|According to the passage, real learning begins when the student|Watches a lecture|Downloads material|Takes an exam|Questions, applies and revises|D|Stated in the second sentence.",
+"2|The teacher’s changing role is that of a|Guide|Sole source of information|Examiner only|Administrator|A|Teachers design tasks, give feedback and encourage reflection.",
+"2|“Mistaking convenience for depth” warns against|Assuming easy access means deep learning|Avoiding technology|Giving feedback|Designing tasks|A|The closing line cautions against equating access with depth.",
+"2|The tone of the passage is|Hostile|Humorous|Thoughtful and cautionary|Indifferent|C|It praises technology but adds a caution.",
+"3|The SMCR model of communication was given by|Shannon|Lasswell|Berlo|Schramm|C|SMCR: Source, Message, Channel, Receiver (Berlo).",
+"3|The study of body movements in communication is|Proxemics|Chronemics|Haptics|Kinesics|D|Proxemics is space, chronemics time, haptics touch.",
+"3|A barrier arising from different meanings of the same word is|Semantic|Physical|Physiological|Mechanical|A|Semantic barriers come from word meanings.",
+"3|The phrase “global village” is associated with|Marshall McLuhan|Harold Lasswell|Wilbur Schramm|Claude Shannon|A|McLuhan said electronic media shrink the world.",
+"3|The most effective classroom communication is|One-way|Written only|Two-way|Non-verbal only|C|Feedback makes the exchange effective.",
+"4|Find the next term: 2, 6, 12, 20, 30, ?|40|42|44|36|B|Terms are n(n+1); the next is 6×7 = 42.",
+"4|If cost price is ₹800 and selling price is ₹1000, profit % is|20|30|25|15|C|200/800 × 100 = 25.",
+"4|A train covers 180 km in 3 hours. Its speed in m/s is about|15|18|20|16.67|D|60 km/h × 5/18 = 16.67 m/s.",
+"4|The average of five numbers is 20. After removing 30, the average of the other four is|15|17.5|20|22.5|B|Total 100 − 30 = 70; 70/4 = 17.5.",
+"4|Dividing 160 in the ratio 3:5, the larger part is|60|80|100|120|C|160/8 = 20; 5 × 20 = 100.",
+"5|In the square of opposition, A and O propositions are|Contraries|Subcontraries|Subalterns|Contradictories|D|They cannot be both true or both false.",
+"5|Which is NOT one of the four Nyaya pramanas?|Arthapatti|Pratyaksha|Upamana|Shabda|A|Nyaya: pratyaksha, anumana, upamana, shabda.",
+"5|Attacking the person instead of the argument is the fallacy of|Equivocation|Ad hominem|Accent|Petitio principii|B|Ad hominem targets the speaker.",
+"5|Conclusions of inductive arguments are|Certain|Always false|Probable|Tautologies|C|Induction gives probability, not certainty.",
+"5|Hetvabhasa refers to|Valid perception|Comparison|Testimony|A fallacious reason in inference|D|Hetvabhasa is an apparent, fallacious hetu.",
+"6|The percentage increase in sales from 2023 to 2024 is|30%|33.3%|50%|60%|C|(90 − 60)/60 × 100 = 50.",
+"6|Which chart best shows parts of a whole?|Pie chart|Scatter plot|Histogram|Line chart|A|Each slice is a share of 100%.",
+"6|A histogram is used for|Categorical data|Maps|Continuous frequency distributions|Qualitative ranks|C|Bars touch because classes are continuous.",
+"6|Gender, as a variable, is|Continuous quantitative|Qualitative|Interval scale|Ratio scale|B|It is a category, not a measured quantity.",
+"6|Total units sold from 2022 to 2025 is|280|290|310|300|D|40 + 60 + 90 + 110 = 300.",
+"7|HTTP stands for|HyperText Transfer Protocol|High Transfer Text Process|HyperText Transmission Program|Host Transfer Technology Protocol|A|The web’s transfer protocol.",
+"7|Which protocol is used to send e-mail?|POP3|FTP|SMTP|IMAP|C|SMTP sends; POP3 and IMAP retrieve.",
+"7|A private network restricted to an organisation is|Internet|Intranet|World Wide Web|Cloud|B|An intranet is private to one organisation.",
+"7|e-PG Pathshala provides|Passport services|Online banking|GST filing|E-content for postgraduate courses|D|It offers free PG e-content.",
+"7|DigiLocker is used for|Storing digital documents|Video calling|Web browsing|Gaming|A|It stores government-issued digital documents.",
+"8|The number of Sustainable Development Goals is|8|12|17|20|C|17 SDGs for 2030; the MDGs numbered 8.",
+"8|The Environment (Protection) Act was enacted in|1972|1986|1981|2002|B|Passed in 1986 after the Bhopal tragedy.",
+"8|Which is a renewable energy source?|Coal|Petroleum|Natural gas|Solar|D|The others are fossil fuels.",
+"8|Minamata disease is caused by|Lead|Mercury|Arsenic|Cadmium|B|Mercury-contaminated seafood in Japan.",
+"8|Noise pollution is measured in|Decibels|Hertz|Lux|Pascals|A|Hertz is frequency, lux light, pascal pressure.",
+"9|Which was an ancient Buddhist centre of higher learning?|Aligarh|Fort William|Nalanda|IIT Delhi|C|Nalanda stood in present-day Bihar.",
+"9|The UGC became a statutory body in|1948|1956|1964|1986|B|The UGC Act was passed in 1956.",
+"9|NEP 2020 proposes a single higher-education regulator named|UGC|AICTE|NAAC|HECI|D|HECI: Higher Education Commission of India.",
+"9|The regulator of technical education in India is|AICTE|NCERT|NAAC|ICSSR|A|AICTE regulates technical education.",
+"9|Which body assesses and accredits higher education institutions?|AICTE|NAAC|NCTE|CSIR|B|NAAC grades institutions."
+];
+const P="Digital tools have widened access to learning, yet access alone does not produce understanding. A student who watches a recorded lecture may feel informed, but real learning begins when the student questions, applies and revises what was heard. Teachers therefore act less as sources of information and more as guides who design tasks, give timely feedback and encourage reflection. Technology can make assessment faster, but it cannot replace the human judgement that tells a learner why a mistake matters. The danger lies in mistaking convenience for depth.";
+const T="Units sold: 2022 = 40 · 2023 = 60 · 2024 = 90 · 2025 = 110";
+(function(){
+
+const U=[
+["Teaching Aptitude","Teaching",["Levels of teaching","Learner characteristics","Individual differences","Factors affecting teaching","Teaching methods","Online: SWAYAM, MOOCs","Teaching support / ICT","Evaluation systems"]],
+["Research Aptitude","Research",["Types of research","Positivism","Research methods","Steps of research","Thesis &amp; referencing","ICT in research","Research ethics"]],
+["Comprehension","Comprehension",["Reading a passage","Main idea","Inference","Tone &amp; purpose"]],
+["Communication","Communication",["Types &amp; characteristics","Verbal / non-verbal","Classroom communication","Barriers","Mass media &amp; society"]],
+["Mathematical Reasoning","Maths",["Types of reasoning","Number &amp; letter series","Codes &amp; relationships","Ratio &amp; percentage","Profit, loss, interest","Time &amp; distance","Averages"]],
+["Logical Reasoning","Logic",["Argument structure","Categorical propositions","Fallacies","Deductive vs inductive","Venn diagrams","Pramanas","Anumana &amp; Hetvabhasa"]],
+["Data Interpretation","Data",["Sources &amp; classification","Quantitative / qualitative","Bar, pie, line charts","Histograms","Data &amp; governance"]],
+["ICT","ICT",["Abbreviations","Internet &amp; intranet","E-mail","Video-conferencing","Digital initiatives","ICT &amp; governance"]],
+["People, Development &amp; Environment","Environment",["MDGs &amp; SDGs","Human–environment","Pollution types","Health impacts","Natural &amp; energy resources","Hazards &amp; disasters","EPA &amp; climate action"]],
+["Higher Education System","Higher Ed",["Ancient institutions","Post-independence growth","Conventional / open learning","Technical &amp; skill education","Value education","Policies &amp; governance"]]];
+const Q=BANK.map((s,n)=>{const a=s.split("|");return[+a[0],a[1],a.slice(2,6),"ABCD".indexOf(a[6]),a[7],n>=10&&n<=14?P:n>=30&&n<=34?T:""]});
+const RAW=[["Teaching is arranged by depth of thinking demanded.|Memory: Herbart;Understanding: Morrison;Reflective: Hunt","Traits of adolescent and adult learners that shape how they learn.|Adolescents seek identity;Adults are self-directed;Adults bring experience","Learners vary in ability, interest, pace and style.|Intelligence and aptitude;Learning styles;Pace and motivation","Teaching quality depends on teacher, learner, resources and setting.|Teacher and learner;Support material;Environment and institution","Ways of delivering content, teacher-centred or learner-centred.|Lecture is teacher-centred;Discussion is learner-centred;Offline versus online","Digital platforms offering open courses to large audiences.|SWAYAM is a national platform;MOOC means massive open course;Anytime anywhere access","Aids that support instruction: traditional, modern, ICT-based.|Blackboard is traditional;Projector is modern;Smart class is ICT-based","Judging learning through formative and summative measures.|Formative is continuous;Summative is end-term;CBCS uses grades"],
+["Research is systematic inquiry to find new knowledge.|Fundamental or basic;Applied;Action research","Knowledge comes from observable, measurable facts.|Objective reality;Uses experiments;Post-positivism admits bias","Procedures chosen to answer the research question.|Experimental;Descriptive and historical;Qualitative and quantitative","An ordered sequence from problem to report.|Identify problem;Hypothesis and data;Analysis and report","Formal writing with a consistent citation style.|APA style;MLA style;Chicago style","Digital tools used to search, analyse and share studies.|Online databases;Software like SPSS;Reference managers","Moral rules guiding honest and responsible research.|Informed consent;No plagiarism;Honest reporting"],
+["Reading carefully to answer only from the text.|Read fully first;Do not use outside facts;Note paragraph roles","The central point the whole passage supports.|Check topic sentences;Match the title;Avoid details","A conclusion implied but not directly stated.|Read between lines;Stay text-based;Avoid extreme claims","The author’s attitude and reason for writing.|Persuasive or critical;Informative;Descriptive or narrative"],
+["Communication is the exchange of messages between people.|Sender to receiver;Needs feedback;Intentional or unintentional","Words versus gestures, posture, space and tone.|Oral and written;Kinesics is body language;Proxemics is space","Two-way exchange between teacher and students.|Clear message;Active feedback;Inclusive language","Obstacles that distort or block the message.|Physical noise;Semantic barriers;Psychological barriers","Media reach large audiences and shape public opinion.|Print, radio, TV, digital;Agenda setting;Media literacy"],
+["Ways of drawing conclusions from information.|Deductive;Inductive;Analogical","Sequences following a hidden rule.|Find the difference;Check multiples;Letters use position values","Substituting symbols or tracing family and order links.|Letter shifting;Blood relations;Direction sense","Comparing quantities as parts or per hundred.|Ratio a:b;Percent means per 100;Proportion a:b = c:d","Money calculations based on cost and time.|Profit = SP − CP;Simple interest = PRT/100;Discount on marked price","Speed relates distance covered to time taken.|Speed = distance/time;Relative speed;Average speed","The sum of values divided by their number.|Mean = sum/count;Weighted average;Age problems"],
+["An argument gives premises that support a conclusion.|Premises;Conclusion;Valid or invalid","Statements of the forms A, E, I and O.|A: All S are P;E: No S is P;I and O are particular","Errors in reasoning that make an argument unsound.|Formal fallacies;Informal fallacies;Ad hominem","Deduction guarantees the conclusion; induction makes it probable.|Deduction: certainty;Induction: probability;Generalisation","Overlapping circles used to test syllogisms.|Three circles;Shading shows empty;Check validity","Valid means of knowledge in Indian logic.|Pratyaksha is perception;Anumana is inference;Shabda is testimony","Inference through a reason, and its fallacies.|Paksha, sadhya, hetu;Vyapti is invariable relation;Hetvabhasa is fallacious reason"],
+["Data come from primary or secondary sources and are grouped.|Primary: surveys;Secondary: records;Classified into classes","Numerical data versus descriptive data.|Quantitative: numbers;Qualitative: attributes;Both inform decisions","Graphs that display data visually.|Bar compares categories;Pie shows shares;Line shows trends","Bars for continuous frequency classes.|Bars touch;Class intervals;Frequency on y-axis","Using data to plan, monitor and deliver services.|Evidence-based policy;Open data;Privacy and security"],
+["Common ICT short forms to know by heart.|HTTP, URL, HTML;RAM, ROM, CPU;LAN, WAN, MAN","Public global network versus private organisational network.|Internet is public;Intranet is private;Both use TCP/IP","Electronic mail sent through mail servers.|To, Cc, Bcc;SMTP sends;POP3 and IMAP receive","Live audio-video meetings over a network.|Zoom, Meet, Teams;Needs bandwidth;Audio conferencing is voice only","Government platforms for digital higher education.|SWAYAM;e-PG Pathshala;NDLI","Technology used to deliver public services.|e-Governance;Digital India;DigiLocker"],
+["Global development targets set by the United Nations.|8 MDGs by 2015;17 SDGs by 2030;SDGs adopted in 2015","People change the environment through activity.|Anthropogenic activity;Deforestation;Urbanisation","Harmful substances or energy released into surroundings.|Air and water;Soil and noise;Waste management","Pollutants cause disease in humans.|Respiratory illness;Waterborne disease;Hearing loss","Renewable and non-renewable sources of energy.|Solar and wind;Hydro and geothermal;Biomass and nuclear","Natural events that harm people, and ways to reduce harm.|Earthquake, flood, cyclone;Preparedness;Mitigation strategies","Laws and agreements to protect the environment.|EPA 1986;NAPCC;Paris Agreement"],
+["Centres of higher learning in early India.|Nalanda;Takshashila;Vikramshila","Expansion of universities and research after 1947.|Radhakrishnan Commission 1948;UGC 1956;IITs and central universities","Campus, distance and online routes to a degree.|Conventional universities;Open universities like IGNOU;Online programmes","Professional training linked to jobs.|AICTE regulates;Skill India;Vocational courses","Teaching ethics and values along with subjects.|Moral values;Constitutional values;Environmental education","Rules and bodies that run higher education.|NEP 2020;UGC and NAAC;HECI proposed"]];
+const D=RAW.map(u=>u.map(s=>{const[d,p]=s.split("|");return[d,p.split(";")]}));
+const Q2=[["Morrison’s level of teaching centres on what?~Mastery of principles and their relationships.|Which level is the most thought-provoking and problem-centred?~Reflective level.", "Why does peer learning suit adolescents?~They have a strong need for peer approval and belonging.|Adolescence is mainly a stage of which search?~Identity (Erikson).", "Who is credited with the study of individual differences?~Francis Galton.|Which approach best handles individual differences?~Differentiated, learner-centred instruction.", "Which is a learner-related factor in teaching?~Motivation, prior knowledge, readiness.|Is classroom climate a teacher factor or an environment factor?~Learning environment factor.", "In the seminar method, who leads the discussion?~Students, with the teacher as moderator.|The lecture method is described as?~Teacher-centred and one-way.", "What does MOOC stand for?~Massive Open Online Course.|Which ministry coordinates SWAYAM?~Ministry of Education, with AICTE and NPTEL.", "Which is an ICT-based teaching aid?~Smart board, LMS, e-content.|The overhead projector falls under which category?~Modern aid.", "Evaluation used to find a learner’s difficulties is called?~Diagnostic evaluation.|Which system gives credit-based flexibility?~CBCS."], ["Research done to solve an immediate practical problem?~Applied research.|Action research is associated with whom?~Stephen Corey, for classroom problems.", "Which paradigm stresses meaning and lived experience over measurement?~Interpretivism.|Post-positivism holds that objectivity is?~Approximate, never perfect.", "Which method studies past events?~Historical.|Which method uses interviews and observation to explore meanings?~Qualitative research.", "The plan for collecting and analysing data is called?~Research design.|A pilot study is done to?~Test tools and procedure before the main study.", "APA stands for?~American Psychological Association.|Which styles are popular in the humanities?~MLA and Chicago.", "Name a database that indexes citations of journal articles.~Scopus or Web of Science.|Which tool detects plagiarism?~Turnitin or Urkund (Shodhshuddhi in India).", "Which committee clears studies involving human participants?~Institutional Ethics Committee.|Fabricating data is called?~Research misconduct."], ["Should outside knowledge be used?~No, answer only from the passage.|Best first step?~Skim the questions, then read the passage.", "Where is the main idea often found?~In the opening or closing sentences.|Which title is best?~One that covers the whole passage.", "Is an inference stated directly?~No, it is implied.|Which option is safest?~The one closest to the text.", "Sarcasm shows which tone?~Critical or ironic.|An author’s purpose may be?~To inform, persuade or entertain."], ["Which linear model of communication includes noise?~Shannon–Weaver model.|Which element returns the receiver’s reply?~Feedback.", "Eye contact belongs to which type of communication?~Non-verbal.|Study of voice tone and pitch?~Paralanguage.", "Which questioning style keeps students thinking?~Open-ended questions.|Name a classroom barrier.~Jargon or inattention.", "Prejudice in the receiver is which barrier?~Psychological barrier.|Noise in communication means?~Disturbance in the channel.", "Which medium is print media?~Newspaper.|Name an electronic mass medium.~Television or radio."], ["Reasoning from general to specific?~Deductive.|Reasoning from specific to general?~Inductive.", "Next in 3, 6, 11, 18?~27 (differences 3, 5, 7, 9).|Next in A, C, F, J?~O (gaps 2, 3, 4, 5).", "A is brother of B, B is sister of C. A is C’s?~Brother.|If CAT is DBU, DOG is?~EPH.", "20 percent of 250?~50.|Divide 60 in ratio 2:3.~24 and 36.", "Simple interest on 1000 at 10 percent for 2 years?~200.|SP if CP is 500 and loss is 10 percent?~450.", "Speed 60 km/h for 2.5 h. Distance?~150 km.|Convert 36 km/h to m/s.~10 m/s.", "Average of 10, 20, 30?~20.|Average age of 5 persons is 20. Total age?~100."], ["A valid argument has true premises and?~A conclusion that necessarily follows.|Which part is the claim being proved?~Conclusion.", "Which proposition is the A form?~All S are P (universal affirmative).|Example of E form?~No S is P.", "Saying it is true because everyone believes it is which fallacy?~Argumentum ad populum.|Which is a formal fallacy?~Undistributed middle.", "All men are mortal, Socrates is a man, so Socrates is mortal. Which reasoning?~Deductive.|Which moves from general to particular?~Deduction.", "How many circles test a syllogism?~Three.|A shaded region in a Venn diagram means?~Empty.", "Which pramana is knowledge through comparison?~Upamana.|Which school accepts only perception?~Charvaka.", "What is Vyapti?~Invariable concomitance between hetu and sadhya.|Hill has fire because of smoke: the hetu is?~Smoke."], ["Grouping raw data is called?~Classification.|Survey data collected by you is?~Primary data.", "Height is what type of data?~Quantitative.|Number of siblings is what kind of data?~Quantitative (discrete).", "Which chart shows a trend over time?~Line chart.|Which chart compares categories using bars?~Bar chart.", "Which graph suits continuous data?~Histogram.|How does a histogram differ from a bar chart?~Its bars touch.", "Data in governance supports?~Evidence-based decisions.|India’s open data portal?~data.gov.in."], ["Expand URL.~Uniform Resource Locator.|Expand RAM.~Random Access Memory.", "Which private network is shared with trusted partners?~Extranet.|Protocol suite of the internet?~TCP/IP.", "Which field hides recipients?~Bcc.|Which protocol lets you read mail while it stays on the server?~IMAP.", "Which needs only voice?~Audio conferencing.|Name a video-conferencing tool.~Zoom, Google Meet or Teams.", "SWAYAM Prabha delivers education through?~DTH television channels.|NDLI stands for?~National Digital Library of India.", "UMANG is?~A single mobile app for government services.|Digital India was launched in?~2015."], ["How many MDGs were there?~Eight.|SDG 4 is about?~Quality education.", "Activity caused by humans is called?~Anthropogenic.|Major cause of habitat loss?~Deforestation.", "Which chemicals mainly deplete the ozone layer?~CFCs.|Gas mainly causing global warming?~Carbon dioxide.", "Chronic arsenic poisoning is called?~Arsenicosis.|Fluorosis is caused by?~Excess fluoride in water.", "Which renewable source uses the earth’s internal heat?~Geothermal energy.|Name a non-renewable resource.~Coal, petroleum or nuclear fuel.", "Mitigation means?~Reducing a disaster’s impact.|Year of the Disaster Management Act?~2005.", "The Montreal Protocol deals with?~Ozone-depleting substances.|Paris Agreement limits warming to?~Well below 2 degrees Celsius."], ["Vikramshila was founded by which dynasty?~The Pala dynasty.|Takshashila lies in which present-day country?~Pakistan.", "Which commission (1964–66) reviewed all stages of education?~Kothari Commission.|First education commission after independence?~Radhakrishnan Commission, 1948.", "Name an open university.~IGNOU.|Which body regulates higher education standards?~UGC.", "Which corporation promotes skill training in India?~NSDC.|Skill India was launched in?~2015.", "Value education aims at?~Character and ethical development.|Environmental education builds?~Awareness of ecology and sustainability.", "NEP was released in which year?~2020.|What does NIRF do?~Ranks institutions on common parameters."]];
+function qa(i,j){const r=(Q2[i][j]||"").split("|");const f=(s,l)=>{const[q,a]=(s||"").split("~");return q?`<details style="margin-top:8px;border-top:1px solid var(--line);padding:8px 0"><summary style="cursor:pointer"><b>${l}</b> ${q}</summary><p class="ex">${a}</p></details>`:""};return `<h2 style="margin:20px 0 0">QUESTIONS FOR THIS TOPIC · TAP TO REVEAL</h2>`+f(r[0],"Important:")+f(r[1],"Possible:")}
+const LV=["HMMMHHMH","HMHHMMH","HHHM","MHMHH","MHMHHMM","MHHMHHH","MMHLM","HMMLHM","HMHMHMH","HMLMLH"],LN={H:"High",M:"Medium",L:"Low"},MT=(i,j)=>({H:"●●●",M:"●●○",L:"●○○"})[LV[i][j]];
+function det(i){const j=S.t,x=D[i][j];if(!x)return"";const k=i+"-"+j,nm=U[i][2][j].replace(/&amp;/g,"and"),ps=x[1],e=encodeURIComponent("UGC NET "+nm);
+
+const ln=[];nm.split(" ").forEach(w=>{const l=ln[ln.length-1];if(l&&(l+" "+w).length<=15)ln[ln.length-1]=l+" "+w;else ln.push(w)});
+const br=ps.map((p,n)=>{const y=30+n*60;return `<line x1="170" y1="90" x2="250" y2="${y}"/><g class="n"><rect x="250" y="${y-16}" width="330" height="32" rx="16"/><text x="266" y="${y+4}" style="cursor:default">${p}</text></g>`}).join("");
+return `<div class="box" id="p1-det" style="margin-top:24px"><h2 style="text-transform:uppercase">Topic · ${nm}</h2><p class="ex" style="margin:0 0 10px"><b class="lvl">Question possibility: ${LN[LV[i][j]]} ${MT(i,j)}</b> · my estimate from typical NET patterns, not official data</p><p style="margin:0 0 12px"><b>Definition.</b> ${x[0]}</p><svg class="map" viewBox="0 0 600 180" role="img" aria-label="Diagram of ${nm}">${br}<g class="c"><circle cx="100" cy="90" r="70"/><text>${ln.map((l,n)=>`<tspan x="100" y="${94-(ln.length-1)*7+n*14}" text-anchor="middle">${l}</tspan>`).join("")}</text></g></svg>${qa(i,j)}<div class="links"><button class="cta" data-d="${j}" style="margin:0">${S.done[k]?"Unmark as covered":"Mark as covered"}</button><a target="_blank" rel="noopener" href="https://www.google.com/search?q=${e}+questions+with+answers">More questions ↗</a><a target="_blank" rel="noopener" href="https://www.google.com/search?q=${e}+diagram&tbm=isch">Diagrams ↗</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${e}+explained">Video ↗</a></div></div>`}
+const KEY="netp1v1";let S={u:0,tab:"map",done:{},ans:{},t:0,hp:0};
+try{Object.assign(S.done,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S.done))}catch(e){}};
+const $=s=>document.querySelector(s),main=$("#p1-main");
+const cnt=i=>U[i][2].filter((_,j)=>S.done[i+"-"+j]).length;
+const enc=encodeURIComponent;
+function nav(){$("#p1-nav").innerHTML=U.map((u,i)=>`<button data-u="${i}" aria-current="${S.u===i&&S.tab!=="mock"}"><span>${i+1}. ${u[1]}</span><span>${cnt(i)}/${u[2].length}</span></button>`).join("")+`<button class="mock" data-mock>Start mock test</button>`}
+function map(i){const t=U[i][2],n=t.length,W=600,H=400,cx=300,cy=200;let L="",N="";
+t.forEach((x,j)=>{const a=-Math.PI/2+j*2*Math.PI/n,px=cx+Math.cos(a)*215,py=cy+Math.sin(a)*150,w=x.replace(/&amp;/g,"&").length*6.6+22,d=S.done[i+"-"+j];
+L+=`<line x1="${cx}" y1="${cy}" x2="${px}" y2="${py}"/>`;
+N+=`<g class="n ${d?"d":""}${LV[i][j]==="H"?" hp":""}${S.hp&&LV[i][j]!=="H"?" dim":""}" data-t="${j}" tabindex="0" role="button" aria-pressed="${!!d}"><rect x="${px-w/2}" y="${py-15}" width="${w}" height="30" rx="15"/><text x="${px}" y="${py+4}" text-anchor="middle">${x}</text></g>`});
+return `<svg class="map" viewBox="0 0 ${W} ${H}" role="img" aria-label="Concept map">${L}<g class="c"><circle cx="${cx}" cy="${cy}" r="46"/><text x="${cx}" y="${cy+4}" text-anchor="middle">${U[i][1]}</text></g>${N}</svg>`}
+function unit(){const i=S.u,u=U[i],p=Math.round(cnt(i)/u[2].length*100),q=encodeURIComponent("UGC NET Paper 1 "+u[0].replace(/&amp;/g,"&"));
+let body;
+if(S.tab==="map")body=`<div class="grid"><div class="box"><h2>CONCEPT MAP · tap a node to mark it done</h2>${map(i)}<p class="lg">Dark outline: high priority · Blue fill: covered</p></div><div class="box"><div class="hd"><h2>SYLLABUS CHECKLIST</h2><button class="chip" data-hp aria-pressed="${!!S.hp}">High priority only</button></div>${u[2].map((x,j)=>S.hp&&LV[i][j]!=="H"?"":`<button class="topic" data-t="${j}" aria-current="${S.t===j}" aria-pressed="${!!S.done[i+"-"+j]}"><i data-d="${j}">${S.done[i+"-"+j]?'<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 5.5l2.5 2.5 4.5-5.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>':""}</i><span>${x}</span><em class="pr ${LV[i][j]==="H"?"hi":""}">${LV[i][j]==="H"?"High priority":LN[LV[i][j]]}</em></button>`).join("")}</div></div>${det(i)}
+<div class="links"><a target="_blank" rel="noopener" href="https://www.google.com/search?q=${q}+previous+year+questions+with+answers">Previous-year questions &amp; answers ↗</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${q}+explained">Video explanations ↗</a><a target="_blank" rel="noopener" href="https://www.google.com/search?q=${q}+concept+diagram&tbm=isch">Concept diagrams ↗</a><a target="_blank" rel="noopener" href="https://ugcnet.nta.ac.in/">Official question papers (NTA) ↗</a></div>`;
+else{const qs=Q.map((x,k)=>[x,k]).filter(([x])=>x[0]===i);body=(i===2||i===6?`<div class="box" style="margin-bottom:14px"><h2>${i===2?"PASSAGE":"DATA"}</h2><p style="margin:0">${i===2?P:T}</p></div>`:"")+qs.map(([x,k])=>{const a=S.ans[k];return `<div class="q"><p>${x[1]}</p>${x[2].map((o,j)=>`<button class="opt ${a!=null?(j===x[3]?"ok":j===a?"no":""):""}" data-q="${k}" data-o="${j}" ${a!=null?"disabled":""}>${o}</button>`).join("")}${a!=null?`<p class="ex"><b>${a===x[3]?"Correct.":"Not quite."}</b> ${x[4]}</p>`:""}</div>`}).join("")}
+main.innerHTML=`<h1>${i+1}. ${u[0]}</h1><p class="sub">${cnt(i)} of ${u[2].length} topics covered · ${[...LV[i]].filter(c=>c==="H").length} high-possibility</p><div class="bar"><div style="width:${p}%"></div></div><div class="tabs" role="tablist"><button role="tab" data-tab="map" aria-selected="${S.tab==="map"}">Syllabus map</button><button role="tab" data-tab="prac" aria-selected="${S.tab==="prac"}">Practice (${Q.filter(x=>x[0]===i).length})</button></div>${body}`;nav()}
+let M=null,tm=null;
+function mock(){clearInterval(tm);const qs=Q.filter(x=>!x[5]).sort(()=>Math.random()-.5).slice(0,10);M={qs,i:0,a:[],left:720};tm=setInterval(()=>{M.left--;if(M.left<=0)finish();else{const e=$("#p1-clk");if(e)e.textContent=fmt()}},1e3);S.tab="mock";nav();mq()}
+const fmt=()=>Math.floor(M.left/60)+":"+String(M.left%60).padStart(2,"0");
+function mq(){const x=M.qs[M.i];main.innerHTML=`<h1>Mock test</h1><p class="sub"><span class="pill">Question ${M.i+1} of ${M.qs.length}</span> · <span class="pill" id="p1-clk">${fmt()}</span> · +2 per correct, no negative marking</p><div class="q"><p>${x[1]}</p>${x[2].map((o,j)=>`<button class="opt" data-m="${j}">${o}</button>`).join("")}</div><button class="cta" data-end>Submit now</button>`}
+function finish(){clearInterval(tm);const b={};let sc=0;M.qs.forEach((x,k)=>{const ok=M.a[k]===x[3];b[x[0]]=b[x[0]]||[0,0];b[x[0]][1]++;if(ok){sc++;b[x[0]][0]++}});
+main.innerHTML=`<h1>Result</h1><p class="sub">Marks (+2 each, no negative)</p><div class="big">${sc*2}<span style="font-size:24px;color:var(--mute)"> / ${M.qs.length*2}</span></div><div class="box" style="margin:20px 0"><h2>BY UNIT</h2><table>${Object.keys(b).map(k=>`<tr><td>${U[k][0]}</td><td>${b[k][0]}/${b[k][1]}</td></tr>`).join("")}</table></div>${M.qs.map((x,k)=>`<div class="q"><p>${x[1]}</p><p class="ex"><b>${M.a[k]===x[3]?"Correct":"Answer: "+x[2][x[3]]}.</b> ${x[4]}</p></div>`).join("")}<button class="cta" data-mockagain>Try another mock</button>`;S.tab="map";nav()}
+document.getElementById("p1-app").addEventListener("click",e=>{const t=e.target.closest("[data-hp],[data-u],[data-d],[data-t],[data-tab],[data-q],[data-mock],[data-m],[data-end],[data-mockagain]");if(!t)return;const d=t.dataset;
+if(d.mock!==undefined||d.mockagain!==undefined)return mock();
+if(d.m!==undefined){M.a[M.i]=+d.m;if(M.i<M.qs.length-1){M.i++;mq()}else finish();return}
+if(d.end!==undefined)return finish();
+if(d.u!==undefined){clearInterval(tm);S.u=+d.u;S.t=0;S.tab="map";return unit()}
+if(d.tab){S.tab=d.tab;return unit()}
+if(d.hp!==undefined){S.hp=S.hp?0:1;return unit()}if(d.d!==undefined){const k=S.u+"-"+d.d;S.done[k]=!S.done[k];save();return unit()}if(d.t!==undefined){S.t=+d.t;unit();const el=document.getElementById("p1-det");if(el)el.scrollIntoView({block:"nearest"});return}
+if(d.q!==undefined){S.ans[d.q]=+d.o;unit()}});
+document.getElementById("p1-app").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches("svg g[data-t]")){e.preventDefault();e.target.dispatchEvent(new MouseEvent("click",{bubbles:true}))}});
+unit();
+
+})();
+(function(){
+
+const SUB=[{n:"Computer Science and Applications",s:"Computer Science",c:"Code 87",U:[
+["Discrete Structures and Optimization","Propositional and predicate logic;Sets, relations, functions;Graph theory;Combinatorics and recurrences;Linear programming;Boolean algebra","The number of edges in a complete graph on n vertices is|n(n−1)/2|n²|n(n+1)/2|2n|A|Each pair of vertices is joined once: C(n,2).~A relation that is reflexive, symmetric and transitive is|Partial order|Equivalence relation|Function|Total order|B|These three properties define an equivalence relation."],
+["Computer System Architecture","Number systems and logic gates;Combinational and sequential circuits;Memory hierarchy and cache;Pipelining;I/O organisation;RISC versus CISC","Which gate is a universal gate?|AND|OR|NAND|XOR|C|Any logic function can be built from NAND alone (also NOR).~The fastest storage in a computer is|Hard disk|RAM|Cache|CPU registers|D|Registers sit inside the CPU, faster than cache."],
+["Programming Languages and Computer Graphics","Object-oriented concepts;Inheritance and polymorphism;Parameter passing;Scripting and web languages;Raster scan and line drawing;2D and 3D transformations","Run-time polymorphism in C++ is achieved through|Function overloading|Virtual functions|Macros|Templates|B|Virtual functions are resolved at run time.~Bresenham’s algorithm is used to|Draw lines using integer arithmetic|Shade curved surfaces|Generate fractals|Render fonts|A|It avoids floating-point calculations."],
+["Database Management Systems","ER model;Relational algebra and SQL;Normalisation;Transactions and ACID;Concurrency control;Indexing and B-trees","In ACID, the letter I stands for|Integrity|Isolation|Insertion|Indexing|B|Isolation keeps concurrent transactions from interfering.~A 1NF table with no partial dependency on the key is in|1NF only|2NF|3NF|BCNF|B|Removing partial dependencies gives 2NF."],
+["System Software and Operating System","Assemblers, linkers, loaders;Process scheduling;Deadlocks;Memory management and paging;File systems;Unix basics","A necessary condition for deadlock is|Preemption|Circular wait|Spooling|Paging|B|Deadlock needs mutual exclusion, hold and wait, no preemption and circular wait.~Starvation can occur in|FCFS|Round robin|Priority scheduling|None|C|Low-priority processes may wait indefinitely."],
+["Software Engineering","SDLC models;Requirements analysis;Design and UML;Testing techniques;Metrics and COCOMO;Maintenance","Testing done without knowledge of the code is|White-box|Black-box|Static analysis|Walkthrough|B|Black-box tests check behaviour against requirements.~COCOMO is a model for|Testing|Cost estimation|Coding|Design|B|It estimates effort and cost from size."],
+["Data Structures and Algorithms","Arrays, stacks, queues;Trees and graphs;Sorting and searching;Hashing;Complexity analysis;Greedy, DP, divide and conquer","Worst-case time of binary search is|O(n)|O(log n)|O(n log n)|O(1)|B|Each step halves the range.~Breadth-first search uses a|Stack|Queue|Heap|Tree|B|A FIFO queue visits nodes level by level."],
+["Theory of Computation and Compilers","Finite automata and regular expressions;Context-free grammars;Pushdown automata;Turing machines and decidability;Lexical and syntax analysis;Code generation","Context-free languages are accepted by|Finite automata|Pushdown automata|Mealy machines|Linear bounded automata|B|A pushdown automaton adds a stack to a finite automaton.~The first phase of a compiler is|Syntax analysis|Lexical analysis|Code generation|Optimisation|B|The lexer turns characters into tokens."],
+["Data Communication and Computer Networks","OSI and TCP/IP layers;Error detection (CRC);Routing algorithms;TCP, UDP, congestion control;IP addressing and subnetting;Network security","Routing is handled at the|Data link layer|Network layer|Transport layer|Session layer|B|The network layer (IP) forwards packets between networks.~Which protocol is connectionless?|TCP|UDP|FTP|SMTP|B|UDP sends datagrams without a connection."],
+["Artificial Intelligence","Search (BFS, A*);Knowledge representation;Logic and inference;Fuzzy logic;Neural networks;Machine learning basics","A* search evaluates nodes using|g(n) only|h(n) only|g(n) + h(n)|Depth only|C|f(n) = path cost so far plus heuristic estimate.~Which is a supervised learning task?|Clustering|Classification|Association rules|Anomaly profiling|B|Classification learns from labelled examples."]]},
+{n:"Psychology",s:"Psychology",c:"Code 04",U:[
+["Emergence of Psychology","Structuralism and functionalism;Behaviourism;Gestalt;Psychoanalysis;Humanistic and cognitive schools;Indian psychology","The first psychology laboratory (1879) was set up by|William James|Wilhelm Wundt|Sigmund Freud|John Watson|B|Wundt founded it in Leipzig.~Behaviourism is associated with|Titchener|Watson|Koffka|Rogers|B|Watson argued psychology should study observable behaviour."],
+["Research Methodology and Statistics","Research types and hypotheses;Sampling;Validity and reliability;Measurement scales;Parametric tests (t, ANOVA);Non-parametric tests","To compare the means of two groups, one uses a|Chi-square test|t-test|Correlation|Factor analysis|B|A t-test compares two means.~Which scale has a true zero?|Nominal|Ordinal|Interval|Ratio|D|Only the ratio scale has an absolute zero."],
+["Psychological Testing","Test construction;Reliability;Validity;Norms;Intelligence tests;Personality inventories","Consistency of test scores is called|Validity|Reliability|Norm|Standardisation|B|Reliability means stable, repeatable scores.~The Binet–Simon scale first measured|Personality|Intelligence|Attitude|Interest|B|It was built to identify children needing help."],
+["Biological Basis of Behaviour","Neuron and synapse;Neurotransmitters;Brain structures;Endocrine system;Sleep and rhythms;Psychophysiology","Memory formation depends mainly on the|Cerebellum|Hippocampus|Medulla|Thalamus|B|The hippocampus consolidates new memories.~Parkinson’s disease is linked to low|Serotonin|Dopamine|GABA|Acetylcholine|B|Loss of dopamine neurons causes it."],
+["Attention, Perception, Learning and Memory","Attention models;Perceptual organisation;Classical conditioning;Operant conditioning;Memory systems;Theories of forgetting","Pavlov is associated with|Operant conditioning|Classical conditioning|Insight learning|Observational learning|B|Pavlov studied conditioned reflexes in dogs.~Short-term memory capacity (Miller) is about|3 ± 1|7 ± 2|15 ± 3|Unlimited|B|Miller’s magical number seven, plus or minus two."],
+["Thinking, Intelligence and Creativity","Concept formation;Problem solving and decisions;Spearman and Thurstone;Gardner and Sternberg;Emotional intelligence;Creativity","Multiple intelligences theory was proposed by|Spearman|Gardner|Guilford|Binet|B|Gardner listed several relatively independent intelligences.~Divergent thinking is most linked to|Rote memory|Creativity|Perception only|Reflexes|B|Guilford tied divergent production to creativity."],
+["Personality, Motivation and Emotion","Freud’s structure of mind;Jung and Adler;Trait theories (Allport, Eysenck);Maslow and McClelland;Theories of emotion","The hierarchy of needs was proposed by|Maslow|McClelland|Murray|Herzberg|A|Maslow ordered needs from physiological to self-actualisation.~Id, ego and superego come from|Jung|Adler|Freud|Allport|C|They are the three parts of Freud’s psychic structure."],
+["Social and Cultural Psychology","Attitude formation and change;Conformity and obedience;Group dynamics and leadership;Prejudice;Aggression and prosocial behaviour;Social cognition","Cognitive dissonance theory was proposed by|Asch|Festinger|Milgram|Bandura|B|Festinger described discomfort from inconsistent beliefs.~Obedience to authority was studied by|Zimbardo|Asch|Milgram|Sherif|C|Milgram’s shock experiments."],
+["Developmental Psychology","Piaget’s stages;Erikson’s stages;Kohlberg’s moral development;Vygotsky;Attachment;Adolescence and ageing","Piaget’s second stage is|Sensorimotor|Preoperational|Concrete operational|Formal operational|B|Order: sensorimotor, preoperational, concrete, formal.~The zone of proximal development comes from|Piaget|Erikson|Bruner|Vygotsky|D|It is the gap between what a child can do alone and with help."],
+["Applied Psychology","Clinical and abnormal psychology;Counselling approaches;Organisational psychology;Educational and health psychology;Sports psychology;Well-being and interventions","Carl Rogers is associated with|Client-centred therapy|REBT|Psychoanalysis|Systematic desensitisation|A|Rogers stressed empathy and unconditional positive regard.~Cognitive therapy was developed by|Albert Ellis|Aaron Beck|B. F. Skinner|Joseph Wolpe|B|Beck’s cognitive therapy targets distorted thoughts."]]}];
+const P=s=>{const a=s.split("|");return{q:a[0],o:a.slice(1,5),k:"ABCD".indexOf(a[5]),e:a[6]}};
+const LV2=[["HHHMMH","HHHMML","HHMMMH","MHHHMM","MHHHMM","HMMHML","HHHMHH","HHMHML","HMHHHM","HMMMHH"],["MHMHML","HMHHHM","HHHMMM","MHHMLL","MHHHHM","MMHHMM","HMHHM","HHMMMM","HHHMML","HHMMLL"]],pri=c=>c==="H"?'<em class="pr hi">High priority</em>':c==="M"?'<em class="pr">Medium</em>':'<em class="pr">Low</em>';
+const KEY="netp2v1";let S={s:0,u:0,tab:"learn",ans:{},done:{},hp:0},M=null,tm=null;
+try{Object.assign(S.done,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S.done))}catch(e){}};
+const main=document.getElementById("p2-main"),fmt=t=>Math.floor(t/60)+":"+String(t%60).padStart(2,"0");
+const cnt=(s,u)=>SUB[s].U[u][1].split(";").filter((_,j)=>S.done[s+"-"+u+"-"+j]).length;
+function hdr(){document.getElementById("p2-sw").innerHTML=SUB.map((x,i)=>`<button data-s="${i}" aria-pressed="${S.s===i}">${x.s}</button>`).join("");
+document.getElementById("p2-nav").innerHTML=SUB[S.s].U.map((u,i)=>`<button data-u="${i}" aria-current="${S.u===i&&S.tab==="learn"}"><span>${i+1}. ${u[0]}</span><span>${cnt(S.s,i)}/${u[1].split(";").length}</span></button>`).join("")+`<button class="mock" data-mock>Start mock test</button>`}
+function unit(){const sub=SUB[S.s],u=sub.U[S.u],tp=u[1].split(";"),qs=u[2].split("~").map(P),d=cnt(S.s,S.u),q=encodeURIComponent("UGC NET "+sub.n+" "+u[0]);
+main.innerHTML=`<h1>${S.u+1}. ${u[0]}</h1><p class="sub">${sub.n} · ${sub.c} · ${d} of ${tp.length} topics covered · ${[...LV2[S.s][S.u]].filter(c=>c==="H").length} high priority</p><div class="bar"><div style="width:${d/tp.length*100}%"></div></div><div class="grid"><div class="box"><div class="hd"><h2>KEY TOPICS</h2><button class="chip" data-hp aria-pressed="${!!S.hp}">High priority only</button></div>${tp.map((x,j)=>S.hp&&LV2[S.s][S.u][j]!=="H"?"":`<button class="tp" data-t="${j}" aria-pressed="${!!S.done[S.s+"-"+S.u+"-"+j]}"><i>${S.done[S.s+"-"+S.u+"-"+j]?'<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 5.5l2.5 2.5 4.5-5.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>':""}</i><span>${x}</span>${pri(LV2[S.s][S.u][j])}</button>`).join("")}</div><div class="box"><h2>PRACTICE QUESTIONS</h2>${qs.map((x,k)=>{const key=S.s+"-"+S.u+"-"+k,a=S.ans[key];return `<div class="q"><p>${x.q}</p>${x.o.map((t,j)=>`<button class="o ${a!=null?(j===x.k?"ok":j===a?"no":""):""}" data-q="${key}" data-o="${j}" ${a!=null?"disabled":""}>${"ABCD"[j]}. ${t}</button>`).join("")}${a!=null?`<p class="ex"><b>${a===x.k?"Correct.":"Not quite."}</b> ${x.e}</p>`:""}</div>`}).join("")}</div></div><div class="links"><a target="_blank" rel="noopener" href="https://www.google.com/search?q=${q}+previous+year+questions+with+answers">Previous-year questions ↗</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${q}+explained">Video explanations ↗</a><a target="_blank" rel="noopener" href="https://www.google.com/search?q=${q}+concept+diagram&tbm=isch">Concept diagrams ↗</a><a target="_blank" rel="noopener" href="https://ugcnet.nta.ac.in/">Official syllabus and papers (NTA) ↗</a></div>`;hdr()}
+function mock(){clearInterval(tm);const qs=[];SUB[S.s].U.forEach((u,i)=>u[2].split("~").forEach(s=>qs.push({...P(s),u:i})));qs.sort(()=>Math.random()-.5);M={qs,i:0,a:[],left:1440};S.tab="mock";tm=setInterval(()=>{M.left--;const c=document.getElementById("p2-clk");if(c)c.textContent=fmt(M.left);if(M.left<=0)fin()},1000);hdr();mq()}
+function mq(){const x=M.qs[M.i];main.innerHTML=`<h1>${SUB[S.s].s} mock test</h1><p class="sub">Question ${M.i+1} of ${M.qs.length} · <span class="clk" id="p2-clk">${fmt(M.left)}</span> · +2 per correct, no negative marking</p><div class="box"><p style="margin:0 0 10px;font-weight:600">${x.q}</p>${x.o.map((t,j)=>`<button class="o ${M.a[M.i]===j?"sel":""}" data-m="${j}">${"ABCD"[j]}. ${t}</button>`).join("")}</div><button class="btn" data-mp ${M.i?"":"disabled"}>Previous</button> <button class="cta" data-mn>${M.i<M.qs.length-1?"Save and next":"Submit"}</button> <button class="btn" data-fin>Submit now</button>`}
+function fin(){clearInterval(tm);const b=SUB[S.s].U.map(()=>[0,0]);let c=0;M.qs.forEach((x,k)=>{b[x.u][1]++;if(M.a[k]===x.k){c++;b[x.u][0]++}});
+main.innerHTML=`<h1>Result</h1><div class="big">${c*2}<span style="font-size:24px;color:var(--mute)"> / ${M.qs.length*2}</span></div><p class="sub">${c} correct · ${M.qs.length-c} not correct or skipped</p><div class="box" style="margin:16px 0"><h2>BY UNIT</h2><table>${SUB[S.s].U.map((u,i)=>`<tr><td>${i+1}. ${u[0]}</td><td>${b[i][0]}/${b[i][1]}</td></tr>`).join("")}</table></div>${M.qs.map((x,k)=>`<div class="box" style="margin-bottom:10px"><p style="margin:0 0 4px"><b>${k+1}.</b> ${x.q}</p><p style="margin:0">Your answer: <span class="${M.a[k]===x.k?"g":"r"}">${M.a[k]==null?"not attempted":"ABCD"[M.a[k]]+". "+x.o[M.a[k]]}</span>${M.a[k]===x.k?"":` · Correct: <span class="g">${"ABCD"[x.k]}. ${x.o[x.k]}</span>`}</p><p class="ex">${x.e}</p></div>`).join("")}<button class="cta" data-mock>Another attempt</button>`;S.tab="learn";hdr()}
+document.getElementById("p2-app").addEventListener("click",e=>{const t=e.target.closest("[data-hp],[data-s],[data-u],[data-t],[data-q],[data-mock],[data-m],[data-mp],[data-mn],[data-fin]");if(!t)return;const d=t.dataset;
+if(d.mock!==undefined)return mock();
+if(d.m!==undefined){M.a[M.i]=+d.m;return mq()}
+if(d.mp!==undefined){M.i--;return mq()}
+if(d.mn!==undefined){if(M.i<M.qs.length-1){M.i++;return mq()}return fin()}
+if(d.fin!==undefined)return fin();
+if(d.s!==undefined){clearInterval(tm);S.s=+d.s;S.u=0;S.tab="learn";return unit()}
+if(d.u!==undefined){clearInterval(tm);S.u=+d.u;S.tab="learn";return unit()}
+if(d.hp!==undefined){S.hp=S.hp?0:1;return unit()}if(d.t!==undefined){const k=S.s+"-"+S.u+"-"+d.t;S.done[k]=!S.done[k];save();return unit()}
+if(d.q!==undefined){S.ans[d.q]=+d.o;unit()}});
+unit();
+
+})();
+(function(){
+
+const U=["Teaching","Research","Comprehension","Communication","Maths","Logic","Data Interp.","ICT","Environment","Higher Ed"];
+
+
+const Q=BANK.map(s=>{const a=s.split("|");return{u:+a[0],q:a[1],o:a.slice(2,6),k:"ABCD".indexOf(a[6]),e:a[7]}});
+let S,tm;const root=document.getElementById("p3-root");
+const fmt=t=>String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0");
+const st=i=>{const a=S.a[i]!=null,m=S.r[i];return a&&m?"am":m?"m":a?"a":S.v[i]?"n":""};
+function home(){root.innerHTML=`<section class="home"><div class="mk" style="margin-bottom:16px">N1</div><h1>UGC NET Paper-1 Exam Simulator</h1><p>A full-length mock modelled on the computer-based test.</p><ul><li>50 questions, 5 per unit (rows in the palette are units)</li><li>100 marks: +2 per correct answer, no negative marking</li><li>60 minutes; the paper submits itself at zero</li><li>Unit 3 has a passage; Unit 7 has a data table</li></ul><div class="row2"><button class="btn p" data-act="exam">Start timed exam</button><button class="btn" data-act="practice">Practice mode (untimed, instant answers)</button></div></section>`}
+function begin(m){clearInterval(tm);S={m,cur:0,a:Array(50).fill(null),v:Array(50).fill(0),r:Array(50).fill(0),left:3600,on:true,dlg:false,done:false};S.v[0]=1;if(m==="exam")tm=setInterval(()=>{S.left--;const c=document.getElementById("p3-clk");if(c){c.textContent=fmt(S.left);c.classList.toggle("lo",S.left<300)}if(S.left<=0)finish()},1000);render()}
+function go(i){S.cur=i;S.v[i]=1;S.dlg=false;render()}
+function exam(){const i=S.cur,q=Q[i],pr=S.m==="practice",a=S.a[i];
+const ctx=i>=10&&i<=14?`<div class="ctx"><b>Passage for Q11–15</b><p>${P}</p></div>`:i>=30&&i<=34?`<div class="ctx"><b>Data for Q31–35</b><p>${T}</p></div>`:"";
+const cnt=k=>S.a.reduce((n,x,j)=>n+(k(j)?1:0),0);
+const side=`<aside class="side"><h2>QUESTION PALETTE</h2>${U.map((u,r)=>`<div class="pr"><span>U${r+1}</span>${[0,1,2,3,4].map(c=>{const j=r*5+c;return `<button class="pb ${st(j)} ${j===i?"c":""}" data-g="${j}" aria-label="Question ${j+1}">${j+1}</button>`}).join("")}</div>`).join("")}<div class="lg"><span>■ answered</span><span style="color:var(--bad)">□ not answered</span><span>◌ marked for review</span><span>□ not visited</span></div><p class="ex">Answered ${cnt(j=>S.a[j]!=null)} · Review ${cnt(j=>S.r[j])} · Left ${cnt(j=>S.a[j]==null)}</p></aside>`;
+const main=S.dlg?`<div class="dlg"><h2 style="margin:0 0 8px">Submit the paper?</h2><p>Answered ${cnt(j=>S.a[j]!=null)} of 50 · Marked for review ${cnt(j=>S.r[j])} · Not visited ${cnt(j=>!S.v[j])}</p><div class="act"><button class="btn p" data-act="confirm">Yes, submit</button><button class="btn" data-act="back">Go back</button></div></div>`:
+`<div><div class="u">Unit ${q.u+1}: ${U[q.u]} · Question ${i+1} of 50</div>${ctx}<p class="qt">${q.q}</p>${q.o.map((t,j)=>{const c=pr&&a!=null?(j===q.k?"ok":j===a?"no":""):(a===j?"sel":"");return `<button class="o ${c}" data-o="${j}" ${pr&&a!=null?"disabled":""}><b>${"ABCD"[j]}</b><span>${t}</span></button>`}).join("")}${pr&&a!=null?`<p class="ex"><b>${a===q.k?"Correct.":"Not quite."}</b> ${q.e}</p>`:""}<div class="act"><button class="btn" data-act="prev" ${i?"":"disabled"}>Previous</button><button class="btn" data-act="clear">Clear response</button><button class="btn" data-act="mark">${S.r[i]?"Unmark review":"Mark for review"} &amp; next</button><button class="btn p" data-act="next">Save &amp; next</button></div></div>`;
+root.innerHTML=`<header class="bar"><div class="mk">N1</div><div class="t">NET Paper-1<small>${pr?"Practice mode":"Timed exam · 100 marks"}</small></div><div class="clk" id="p3-clk">${pr?"Untimed":fmt(S.left)}</div><button class="btn p" data-act="submit">Submit</button></header><div class="wrap">${main}${side}</div>`}
+function finish(){clearInterval(tm);S.done=true;render()}
+function result(){let c=0,w=0;const b=U.map(()=>[0,0]);Q.forEach((q,i)=>{b[q.u][1]++;if(S.a[i]===q.k){c++;b[q.u][0]++}else if(S.a[i]!=null)w++});const at=c+w;
+root.innerHTML=`<section class="res"><div class="u">Result</div><div class="big">${c*2}<span style="font-size:26px;color:var(--mute)"> / 100</span></div><p>${c} correct · ${w} wrong · ${50-at} unattempted · accuracy ${at?Math.round(c/at*100):0}% · ${S.m==="exam"?"time used "+fmt(3600-Math.max(S.left,0)):"practice"}</p><div class="side" style="margin:20px 0"><h2>BY UNIT</h2><table>${U.map((u,r)=>`<tr><td>${r+1}. ${u}</td><td>${b[r][0]}/5</td></tr>`).join("")}</table></div><button class="btn p" data-act="retake">Take another attempt</button><h2 style="margin-top:32px">Review</h2>${Q.map((q,i)=>{const a=S.a[i];return `<div class="rq"><p><b>${i+1}.</b> ${q.q}</p><p>Your answer: <span class="${a===q.k?"g":"r"}">${a==null?"not attempted":"ABCD"[a]+". "+q.o[a]}</span></p>${a===q.k?"":`<p>Correct: <span class="g">${"ABCD"[q.k]}. ${q.o[q.k]}</span></p>`}<p class="ex">${q.e}</p></div>`}).join("")}</section>`}
+function render(){if(!S||!S.on)return home();if(S.done)return result();exam()}
+document.getElementById("p3-app").addEventListener("click",e=>{const t=e.target.closest("[data-o],[data-g],[data-act]");if(!t)return;const d=t.dataset;
+if(d.o!==undefined){S.a[S.cur]=+d.o;return render()}
+if(d.g!==undefined)return go(+d.g);
+const a=d.act;
+if(a==="exam"||a==="practice")return begin(a);
+if(a==="retake"){clearInterval(tm);S=null;return home()}
+if(a==="next"&&S.cur<49)return go(S.cur+1);
+if(a==="prev"&&S.cur>0)return go(S.cur-1);
+if(a==="clear"){S.a[S.cur]=null;return render()}
+if(a==="mark"){S.r[S.cur]=S.r[S.cur]?0:1;return S.cur<49?go(S.cur+1):render()}
+if(a==="submit"){S.dlg=true;return render()}
+if(a==="back"){S.dlg=false;return render()}
+if(a==="confirm")return finish()});
+home();
+
+})();
+(function(){const H={"#paper-2":"p2","#exam":"p3"},K={p2:"paper-2",p3:"exam"},b=[...document.querySelectorAll("[data-p]")];const Z=[.9,1,1.15,1.3,1.5],fb=[...document.querySelectorAll("[data-fs]")];let zi=1;try{const v=+localStorage.getItem("netfs");if(Z.includes(v))zi=Z.indexOf(v)}catch(e){}function zf(){["p1","p2","p3"].forEach(x=>document.getElementById(x+"-app").style.zoom=Z[zi]);fb[0].disabled=zi===0;fb[2].disabled=zi===Z.length-1;fb[1].title=Math.round(Z[zi]*100)+"%";try{localStorage.setItem("netfs",Z[zi])}catch(e){}}fb.forEach(b=>b.addEventListener("click",()=>{const k=+b.dataset.fs;zi=k===0?1:Math.max(0,Math.min(Z.length-1,zi+k));zf()}));function sh(){const p=H[location.hash]||"p1";["p1","p2","p3"].forEach(x=>document.getElementById(x+"-app").hidden=x!==p);b.forEach(x=>x.setAttribute("aria-selected",x.dataset.p===p))}b.forEach(x=>x.addEventListener("click",()=>{location.hash=K[x.dataset.p]||"paper-1"}));addEventListener("hashchange",sh);sh();zf()})();
+</script>
+</body>
+</html>
