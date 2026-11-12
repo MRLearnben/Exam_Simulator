@@ -127,10 +127,6 @@ No external JavaScript framework, backend server, database or build process is r
 
 Since NET Lab is a standalone HTML application, getting started is simple.
 
-Clone this repository:
-bash
-git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY-NAME.git
-
 Open the downloaded project folder.
 Open the HTML file in your web browser.
 
@@ -150,7 +146,7 @@ Wait for GitHub Pages to publish your website.
 
 Your application will be available at:
 
-https://YOUR-USERNAME.github.io/YOUR-REPOSITORY-NAME/
+https://github.com/MRLearnben/Exam_Simulator
 
 📁 Project Structure
 text
